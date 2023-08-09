@@ -25,56 +25,90 @@ FILE *stderr = &_stderr;
 
 extern int feof(FILE *f) { return f->eof; }
 extern int ferror(FILE *f) { return f->error; }
-static size_t frwerror(ssize_t read_bytes, size_t size, FILE *f) {
-  if (read_bytes > 0) {
-    f->eof = 0;
-    f->error = 0;
-    return read_bytes / size;
-  } else if (read_bytes < 0) {
-    f->eof = 0;
-    f->error = 1;
-    return 0;
-  } else {
-    f->eof = 1;
-    f->error = 0;
-    return 0;
-  }
-}
-
 extern size_t fread(void *buffer, size_t size, size_t count, FILE *f) {
-  if (f->ram_file) {
-    memcpy(buffer, f->file.buffer, size * count);
-    f->file.buffer += size * count;
-  } else {
-    return frwerror(__read(f->file.unix_file.fd, buffer, size * count), size, f);
+  size_t i;
+  unsigned char *ucbuffer = buffer;
+  int c;
+
+  for (i = 0; i < size * count; ++i) {
+    if ((c = fgetc(f)) == EOF) {
+      return i / size;
+    }
+    *ucbuffer++ = (unsigned char) c;
   }
+
+  return count;
   return count;
 }
 
 extern size_t fwrite(const void *buffer, size_t size, size_t count, FILE *f) {
-  if (f->ram_file) {
-    memcpy(f->file.buffer, buffer, size * count);
-    f->file.buffer += size * count;
-  } else {
-    return frwerror(__write(f->file.unix_file.fd, buffer, size * count), size, f);
+  size_t i;
+  const unsigned char *ucbuffer;
+
+  ucbuffer = (const unsigned char *) buffer;
+  for (i = 0; i < size * count; ++i) {
+    if (fputc(*ucbuffer, f) == EOF) {
+      return i / size;
+    }
+    ++ucbuffer;
   }
+
   return count;
 }
 
 extern int fgetc(FILE *f) {
-  unsigned char out;
-  if (fread(&out, 1, 1, f) < 1)
-    return EOF;
-  else
-    return (int) out;
+  unsigned char ucch;
+
+  if (f->ram_file) {
+    f->eof = 0;
+    f->error = 0;
+    return *f->file.buffer++;
+  } else {
+    size_t bytes;
+
+    bytes = __read(f->file.unix_file.fd, &ucch, 1);
+    if (bytes > 0) {
+      f->eof = 0;
+      f->error = 0;
+      return ucch;
+    } else if (bytes < 0) {
+      f->eof = 0;
+      f->error = 1;
+      return EOF;
+    } else {
+      f->eof = 1;
+      f->error = 0;
+      return EOF;
+    }
+  }
 }
 
 extern int fputc(int ch, FILE *f) {
   unsigned char ucch = (unsigned char) ch;
-  if (fwrite(&ucch, 1, 1, f) == 1)
-    return ch;
-  else
-    return EOF;
+
+  ucch = (unsigned char) ch;
+  if (f->ram_file) {
+    f->eof = 0;
+    f->error = 0;
+    *f->file.buffer++ = (char) ucch;
+  } else {
+    size_t bytes;
+
+    bytes = __write(f->file.unix_file.fd, &ucch, 1);
+    if (bytes > 0) {
+      f->eof = 0;
+      f->error = 0;
+      return 0;
+    } else if (bytes < 0) {
+      f->eof = 0;
+      f->error = 1;
+      return EOF;
+    } else {
+      f->eof = 1;
+      f->error = 0;
+      return EOF;
+    }
+  }
 }
 
 extern int fputs(const char *str, FILE *f) {

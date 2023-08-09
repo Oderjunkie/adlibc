@@ -7,7 +7,7 @@ an alternative libc89 implementation.
 ```
 
 ## usage
-assuming that you are in the root directory of the project and have just run `make`,
+assuming that you are in the root directory of adlibc and have just run `make`,
 ```sh
  $ cc -nostdlib -Os -isystem ./include ./adlibc.o -o main ./main.c
 ```
@@ -120,7 +120,7 @@ void perror(const char *);
 
 #include <stdlib.h>
 double atof(const char *);
-int atoi(const char *);
+/* int atoi(const char *); */
 long atol(const char *);
 double strtod(const char *, char **);
 long strtol(const char *, char **, int);

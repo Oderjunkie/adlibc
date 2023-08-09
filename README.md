@@ -61,7 +61,7 @@ double modf(double, double *);
 double fmod(double, double);
 
 #include <setjmp.h>
-typedef struct { ... } jmp_buf;
+typedef ... jmp_buf[...];
 int setjmp(jmp_buf);
 void longjmp(jmp_buf, int);
 

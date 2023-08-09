@@ -5,7 +5,7 @@ csources := $(wildcard ./*.c)
 asmsources := $(wildcard ./*.s)
 sources := $(csources) $(asmsources)
 
-override CFLAGS += -nostdlib
+override CFLAGS += -nostdlib -Wno-builtin-declaration-mismatch
 LDFLAGS += -z noexecstack
 
 %.o : %.c

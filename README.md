@@ -96,7 +96,7 @@ int fscanf(FILE *, const char *, ...);
 int scanf(const char *, ...);
 int sscanf(char *, const char *, ...);
 /* int fgetc(FILE *); */
-char *fgets(char *, int, FILE *);
+/* char *fgets(char *, int, FILE *); */
 /* int fputc(int, FILE *); */
 /* char *fputs(const char *, FILE *); */
 /* int getc(FILE *); */
@@ -108,11 +108,11 @@ char *gets(char *);
 int unget(int, FILE *);
 /* size_t fread(void *, size_t, size_t, FILE *); */
 /* size_t fwrite(const void *, size_t, size_t, FILE *); */
-int fseek(FILE *, long, int);
-long ftell(FILE *);
+/* int fseek(FILE *, long, int); */
+/* long ftell(FILE *); */
 void rewind(FILE *);
-int fgetpos(FILE *, fpos_t *);
-int fsetpos(FILE *, const fpos_t *);
+/* int fgetpos(FILE *, fpos_t *); */
+/* int fsetpos(FILE *, const fpos_t *); */
 void clearerr(FILE *);
 /* int feof(FILE *); */
 /* int ferror(FILE *); */
@@ -144,11 +144,11 @@ div_t div(int, int);
 ldiv_t ldiv(long, long);
 
 #include <string.h>
-char *strcpy(char *, const char *);
-char *strncpy(char *, const char *, int);
+/* char *strcpy(char *, const char *); */
+/* char *strncpy(char *, const char *, int); */
 char *strcat(char *, const char *);
 char *strncat(char *, const char *, int);
-int strcmp(const char *, const char *);
+/* int strcmp(const char *, const char *); */
 int strncmp(const char *, const char *, int);
 /* char *strchr(const char *, int); */
 char *strrchr(const char *, int);
@@ -160,7 +160,7 @@ char *strstr(const char *, const char *);
 char *strerror(int);
 /* char *strtok(char *, const char *); */
 /* void *memcpy(void *, const void *, int); */
-void *memmove(void *, const void *, int);
+/* void *memmove(void *, const void *, int); */
 int memcmp(const void *, const void *, int);
 /* void *strchr(const char *, int, int); */
 

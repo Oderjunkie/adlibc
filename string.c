@@ -69,7 +69,13 @@ extern char *strtok(char *str, const char *delims) {
 
   ogchr = *curstr;
   *curstr = '\0';
-  return out;
+  if (*out) {
+    return out;
+  } else {
+    *curstr = ogchr;
+    ogchr = '\0';
+    return (char *) 0;
+  }
 }
 
 extern void *memcpy(void *dst, const void *src, size_t len) {

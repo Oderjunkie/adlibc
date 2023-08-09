@@ -2,9 +2,6 @@
 #include "include/string.h"
 #include "syscalls.h"
 
-enum { PROT_READ = 0x01, PROT_WRITE = 0x02, PROT_EXEC = 0x04 };
-enum { MAP_PRIVATE = 0x02, MAP_ANONYMOUS = 0x20 };
-
 extern void *malloc(size_t len) {
   void *out;
   out = __mmap(

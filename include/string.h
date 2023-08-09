@@ -10,3 +10,6 @@ extern char *strtok(char *, const char *);
 extern void *memset(void *, int, size_t);
 extern void *memcpy(void *, const void *, size_t);
 extern void *memmove(void *, const void *, size_t);
+extern char *strcpy(char *, const char *);
+extern char *strncpy(char *, const char *, size_t);
+extern int strcmp(const char *, const char *);

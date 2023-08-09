@@ -1,4 +1,5 @@
 #include "include/string.h"
+#include "include/stdlib.h"
 
 extern size_t strlen(const char *str) {
   size_t out = 0;
@@ -94,4 +95,30 @@ extern void *memmove(void *dst, const void *src, size_t n) {
   memcpy(dst, tmp, n);
   free(tmp);
   return dst;
+}
+
+extern char *strcpy(char *dst, const char *src) {
+  memcpy(dst, src, strlen(src) + 1);
+  return dst;
+}
+
+extern char *strncpy(char *dst, const char *src, size_t len) {
+  char *olddst;
+
+  olddst = dst;
+  while (len > 0 && *src) {
+    *dst++ = *src++;
+    --len;
+  }
+  return olddst;
+}
+
+extern int strcmp(const char *lhs, const char *rhs) {
+  while (*lhs && *rhs) {
+    if (*lhs != *rhs) {
+      return *lhs - *rhs;
+    }
+  }
+
+  return 0;
 }

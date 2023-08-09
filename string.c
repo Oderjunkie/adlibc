@@ -87,3 +87,11 @@ extern void *memcpy(void *dst, const void *src, size_t len) {
   }
   return dst;
 }
+
+extern void *memmove(void *dst, const void *src, size_t n) {
+  void *tmp = malloc(n);
+  memcpy(tmp, src, n);
+  memcpy(dst, tmp, n);
+  free(tmp);
+  return dst;
+}

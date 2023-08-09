@@ -1,8 +1,4 @@
 #include "include/stdio.h"
-#undef putc
-#undef putchar
-#undef getc
-#undef getchar
 #include "include/stdlib.h"
 #include "include/string.h"
 #include "syscalls.h"
@@ -156,4 +152,124 @@ extern int getc(FILE *f) {
 
 extern int getchar(void) {
   return fgetc(stdout);
+}
+
+extern int printf(const char *format, ...) {
+  va_list args;
+
+  va_start(args, format);
+  return vprintf(format, args);
+}
+
+extern int fprintf(FILE *f, const char *format, ...) {
+  va_list args;
+
+  va_start(args, format);
+  return vfprintf(f, format, args);
+}
+
+extern int sprintf(char *buffer, const char *format, ...) {
+  va_list args;
+
+  va_start(args, format);
+  return vsprintf(buffer, format, args);
+}
+
+extern int vprintf(const char *format, va_list args) {
+  return vfprintf(stdout, format, args);
+}
+
+extern int vsprintf(char *buffer, const char *format, va_list args) {
+  FILE fraw;
+
+  fraw.eof = 0;
+  fraw.error = 0;
+  fraw.ram_file = 1;
+  fraw.file.buffer = buffer;
+  return vfprintf(&fraw, format, args);
+}
+
+extern int vfprintf(FILE *f, const char *format, va_list args) {
+  /* TODO: implement this function. */
+  fputs(format, f);
+  return strlen(format);
+}
+
+static int vfscanf(FILE *, const char *, va_list);
+
+extern int fscanf(FILE *f, const char *format, ...) {
+  va_list args;
+
+  va_start(args, format);
+  return vfscanf(f, format, args);
+}
+
+extern int scanf(const char *format, ...) {
+  va_list args;
+
+  va_start(args, format);
+  return vfscanf(stdout, format, args);
+}
+
+extern int sscanf(char *buffer, const char *format, ...) {
+  FILE fraw;
+  va_list args;
+
+  fraw.eof = 0;
+  fraw.error = 0;
+  fraw.ram_file = 1;
+  fraw.file.buffer = buffer;
+  va_start(args, format);
+  return vfscanf(&fraw, format, args);
+}
+
+static int vfscanf(FILE *f, const char *format, va_list args) {
+  /* TODO: implement this function. */
+  return 0;
+}
+
+extern char *fgets(char *str, int count, FILE *f) {
+  int chars_read;
+
+  if ((chars_read = fread(str, 1, count, f)) == 0)
+    if (feof(f) || ferror(f))
+      return (char *) 0;
+
+  str[chars_read] = '\0';
+  return str;
+}
+
+extern long int ftell(FILE *f) {
+  if (f->ram_file)
+    return (long int) -1;
+  else
+    return (long int) __lseek(f->file.unix_file.fd, 0, SEEK_CUR);
+}
+
+extern int fseek(FILE *f, long int offset, int origin) {
+  if (f->ram_file) {
+    if (origin == SEEK_CUR) {
+      f->file.buffer += offset;
+      return 0;
+    } else {
+      return EOF;
+    }
+  } else {
+    (void) __lseek(f->file.unix_file.fd, offset, origin);
+    return 0;
+  }
+}
+
+extern int fgetpos(FILE *f, fpos_t *pos) {
+  if ((*pos = ftell(f)) == -1)
+    return EOF;
+  else
+    return 0;
+}
+
+extern int fsetpos(FILE *f, const fpos_t *pos) {
+  if (fseek(f, *pos, SEEK_SET))
+    return EOF;
+  else
+    return 0;
 }

@@ -16,6 +16,10 @@ extern int __close(int fd) {
   return (int) (ssize_t) __syscall(_CLOSE_SYSCALL_NUM, fd);
 }
 
+extern off_t lseek(int fd, off_t offset, int whence) {
+  return (off_t) (ssize_t) __syscall(_LSEEK_SYSCALL_NUM, fd, offset, whence);
+}
+
 extern void *__mmap(void *addr, size_t len, int protections, int flags, int fd, off_t offset) {
   return (void *) __syscall(_MMAP_SYSCALL_NUM, addr, len, protections, flags, fd, offset);
 }

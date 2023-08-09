@@ -18,11 +18,11 @@ FILE *stderr = &_stderr;
 
 extern int feof(FILE *f) { return f->eof; }
 extern int ferror(FILE *f) { return f->error; }
-static size_t frwerror(ssize_t read_bytes, size_t count, FILE *f) {
+static size_t frwerror(ssize_t read_bytes, size_t size, FILE *f) {
   if (read_bytes > 0) {
     f->eof = 0;
     f->error = 0;
-    return read_bytes / count;
+    return read_bytes / size;
   } else if (read_bytes < 0) {
     f->eof = 0;
     f->error = 1;
@@ -35,11 +35,11 @@ static size_t frwerror(ssize_t read_bytes, size_t count, FILE *f) {
 }
 
 extern size_t fread(void *buffer, size_t size, size_t count, FILE *f) {
-  return frwerror(__read(f->fd, buffer, size * count), count, f);
+  return frwerror(__read(f->fd, buffer, size * count), size, f);
 }
 
 extern size_t fwrite(const void *buffer, size_t size, size_t count, FILE *f) {
-  return frwerror(__write(f->fd, buffer, size * count), count, f);
+  return frwerror(__write(f->fd, buffer, size * count), size, f);
 }
 
 extern int fgetc(FILE *f) {

@@ -16,7 +16,7 @@ extern int __close(int fd) {
   return (int) (ssize_t) __syscall(_CLOSE_SYSCALL_NUM, fd);
 }
 
-extern off_t lseek(int fd, off_t offset, int whence) {
+extern off_t __lseek(int fd, off_t offset, int whence) {
   return (off_t) (ssize_t) __syscall(_LSEEK_SYSCALL_NUM, fd, offset, whence);
 }
 

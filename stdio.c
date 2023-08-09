@@ -52,7 +52,7 @@ extern size_t fread(void *buffer, size_t size, size_t count, FILE *f) {
   } else {
     return frwerror(__read(f->file.unix_file.fd, buffer, size * count), size, f);
   }
-  return size * count;
+  return count;
 }
 
 extern size_t fwrite(const void *buffer, size_t size, size_t count, FILE *f) {
@@ -62,7 +62,7 @@ extern size_t fwrite(const void *buffer, size_t size, size_t count, FILE *f) {
   } else {
     return frwerror(__write(f->file.unix_file.fd, buffer, size * count), size, f);
   }
-  return size * count;
+  return count;
 }
 
 extern int fgetc(FILE *f) {

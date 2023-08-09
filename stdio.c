@@ -56,6 +56,22 @@ extern size_t fwrite(const void *buffer, size_t size, size_t count, FILE *f) {
   return count;
 }
 
+static int fgperror(unsigned char ucch, size_t bytes, FILE *f) {
+  if (bytes > 0) {
+    f->eof = 0;
+    f->error = 0;
+    return ucch;
+  } else if (bytes < 0) {
+    f->eof = 0;
+    f->error = 1;
+    return EOF;
+  } else {
+    f->eof = 1;
+    f->error = 0;
+    return EOF;
+  }
+}
+
 extern int fgetc(FILE *f) {
   unsigned char ucch;
 
@@ -67,19 +83,7 @@ extern int fgetc(FILE *f) {
     size_t bytes;
 
     bytes = __read(f->file.unix_file.fd, &ucch, 1);
-    if (bytes > 0) {
-      f->eof = 0;
-      f->error = 0;
-      return ucch;
-    } else if (bytes < 0) {
-      f->eof = 0;
-      f->error = 1;
-      return EOF;
-    } else {
-      f->eof = 1;
-      f->error = 0;
-      return EOF;
-    }
+    return fgperror(ucch, bytes, f);
   }
 }
 
@@ -95,19 +99,7 @@ extern int fputc(int ch, FILE *f) {
     size_t bytes;
 
     bytes = __write(f->file.unix_file.fd, &ucch, 1);
-    if (bytes > 0) {
-      f->eof = 0;
-      f->error = 0;
-      return 0;
-    } else if (bytes < 0) {
-      f->eof = 0;
-      f->error = 1;
-      return EOF;
-    } else {
-      f->eof = 1;
-      f->error = 0;
-      return EOF;
-    }
+    return fgperror(ucch, bytes, f);
   }
 }
 

@@ -1,6 +1,18 @@
 # adlibc
 an alternative libc89 implementation.
 
+## compilation
+```sh
+ $ make
+```
+
+## usage
+assuming that you are in the root directory of the project and have just run `make`,
+```sh
+ $ cc -nostdlib -Os -isystem ./include ./adlibc.o -o main ./main.c
+```
+
+## featureset
 implemented features are commented, unimplemented ones are left alone:
 ```c
 #include <assert.h>

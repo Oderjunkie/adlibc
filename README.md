@@ -76,10 +76,10 @@ T va_arg(va_list, type T);
 #include <stdio.h>
 /* typedef struct { ... } FILE; */
 /* FILE *stdin, *stdout, *stderr; */
-FILE *fopen(const char *, const char *);
+/* FILE *fopen(const char *, const char *); */
 FILE *freopen(const char *, const char *, FILE *);
 int fflush(FILE *);
-int fclose(FILE *);
+/* int fclose(FILE *); */
 int remove(const char *);
 int rename(const char *, const char *);
 FILE *tmpfile();
@@ -95,7 +95,7 @@ int vsprintf(char *, const char *, va_list);
 int fscanf(FILE *, const char *, ...);
 int scanf(const char *, ...);
 int sscanf(char *, const char *, ...);
-int fgetc(FILE *);
+/* int fgetc(FILE *); */
 char *fgets(char *, int, FILE *);
 /* int fputc(int, FILE *); */
 /* char *fputs(const char *, FILE *); */
@@ -158,8 +158,8 @@ char *strrchr(const char *, int);
 char *strstr(const char *, const char *);
 /* size_t strlen(const char *); */
 char *strerror(int);
-char *strtok(char *, const char *);
-void *memcpy(void *, const void *, int);
+/* char *strtok(char *, const char *); */
+/* void *memcpy(void *, const void *, int); */
 void *memmove(void *, const void *, int);
 int memcmp(const void *, const void *, int);
 /* void *strchr(const char *, int, int); */

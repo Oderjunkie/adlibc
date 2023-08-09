@@ -1,5 +1,6 @@
 #include "include/stdlib.h"
 #include "include/string.h"
+#include "include/ctype.h"
 #include "syscalls.h"
 
 extern void *malloc(size_t len) {
@@ -44,3 +45,28 @@ extern void *realloc(void *ptr, size_t newlen) {
   }
 }
 
+const char digits[] = "0123456789";
+
+extern int atoi(const char *str) {
+  int magnitude = 0;
+  int sign = 1;
+
+  while (isspace(*str))
+    ++str;
+
+  if (*str == '+') {
+    sign = 1;
+    ++str;
+  } else if (*str == '-') {
+    sign = -1;
+    ++str;
+  }
+
+  while (isdigit(*str)) {
+    magnitude *= 10;
+    magnitude += strchr(digits, *str) - digits;
+    ++str;
+  }
+
+  return magnitude * sign;
+}

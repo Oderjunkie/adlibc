@@ -1,17 +1,28 @@
 #include "include/stdio.h"
+#undef putc
+#undef putchar
+#undef getc
+#undef getchar
+#include "include/stdlib.h"
 #include "include/string.h"
 #include "syscalls.h"
 
 struct FILE {
-  int fd;
-  int last_char;
+  union {
+    struct {
+      int fd;
+      int last_char;
+    } unix_file;
+    char *buffer;
+  } file;
   unsigned int eof : 1;
   unsigned int error : 1;
+  unsigned int ram_file : 1;
 };
 
-static FILE _stdin = { 0, EOF, 0, 0 };
-static FILE _stdout = { 1, EOF, 0, 0 };
-static FILE _stderr = { 2, EOF, 0, 0 };
+static FILE _stdin = { { { 0, EOF } }, 0, 0, 0 };
+static FILE _stdout = { { { 1, EOF } }, 0, 0, 0 };
+static FILE _stderr = { { { 2, EOF } }, 0, 0, 0 };
 FILE *stdin = &_stdin;
 FILE *stdout = &_stdout;
 FILE *stderr = &_stderr;
@@ -35,11 +46,23 @@ static size_t frwerror(ssize_t read_bytes, size_t size, FILE *f) {
 }
 
 extern size_t fread(void *buffer, size_t size, size_t count, FILE *f) {
-  return frwerror(__read(f->fd, buffer, size * count), size, f);
+  if (f->ram_file) {
+    memcpy(buffer, f->file.buffer, size * count);
+    f->file.buffer += size * count;
+  } else {
+    return frwerror(__read(f->file.unix_file.fd, buffer, size * count), size, f);
+  }
+  return size * count;
 }
 
 extern size_t fwrite(const void *buffer, size_t size, size_t count, FILE *f) {
-  return frwerror(__write(f->fd, buffer, size * count), size, f);
+  if (f->ram_file) {
+    memcpy(f->file.buffer, buffer, size * count);
+    f->file.buffer += size * count;
+  } else {
+    return frwerror(__write(f->file.unix_file.fd, buffer, size * count), size, f);
+  }
+  return size * count;
 }
 
 extern int fgetc(FILE *f) {
@@ -80,4 +103,57 @@ extern int puts(const char *str) {
     return EOF;
   }
   return 0;
+}
+
+extern FILE *fopen(const char *filename, const char *mode) {
+  int flags = 0;
+  mode_t unixmode = 0;
+  FILE *out;
+
+  /* TODO: this does not parse "rb+" correctly. */
+  switch (mode[0] ^ mode[1]) {
+  case 'r': flags = O_RDONLY; break;
+  case 'w': flags = O_WRONLY; unixmode = O_CREAT | O_TRUNC; break;
+  case 'a': flags = O_WRONLY; unixmode = O_CREAT | O_APPEND; break;
+  case 'r' ^ '+': flags = O_RDWR; break;
+  case 'w' ^ '+': flags = O_RDWR; unixmode = O_CREAT | O_TRUNC; break;
+  case 'a' ^ '+': flags = O_RDWR; unixmode = O_CREAT | O_APPEND; break;
+  }
+
+  if (!(out = malloc(sizeof(*out))))
+    return (FILE *) 0;
+  memset(out, 0, sizeof(*out));
+
+  if ((out->file.unix_file.fd = __open(filename, flags, unixmode)) == -1) {
+    free(out);
+    return (FILE *) 0;
+  } else {
+    out->file.unix_file.last_char = EOF;
+    return out;
+  }
+}
+
+extern int fclose(FILE *f) {
+  if (f->ram_file)
+    f->file.buffer = (char *) 0;
+  else
+    if (__close(f->file.unix_file.fd) == -1)
+      return EOF;
+  return 0;
+}
+
+extern int putc(int ch, FILE *f) {
+  return fputc(ch, f);
+}
+
+extern int putchar(int ch) {
+  return fputc(ch, stdout);
+}
+
+extern int getc(FILE *f) {
+  return fgetc(f);
+}
+
+extern int getchar(void) {
+  return fgetc(stdout);
 }

@@ -1,6 +1,7 @@
 #include "include/stdio.h"
 #include "include/stdlib.h"
 #include "include/string.h"
+#include "include/stdarg.h"
 #include "syscalls.h"
 
 struct FILE {
@@ -189,23 +190,32 @@ extern int getchar(void) {
 
 extern int printf(const char *format, ...) {
   va_list args;
+  int out;
 
   va_start(args, format);
-  return vprintf(format, args);
+  out = vprintf(format, args);
+  va_end(args);
+  return out;
 }
 
 extern int fprintf(FILE *f, const char *format, ...) {
   va_list args;
+  int out;
 
   va_start(args, format);
-  return vfprintf(f, format, args);
+  out = vfprintf(f, format, args);
+  va_end(args);
+  return out;
 }
 
 extern int sprintf(char *buffer, const char *format, ...) {
   va_list args;
+  int out;
 
   va_start(args, format);
-  return vsprintf(buffer, format, args);
+  out = vsprintf(buffer, format, args);
+  va_end(args);
+  return out;
 }
 
 extern int vprintf(const char *format, va_list args) {
@@ -234,28 +244,37 @@ static int vfscanf(FILE *, const char *, va_list);
 
 extern int fscanf(FILE *f, const char *format, ...) {
   va_list args;
+  int out;
 
   va_start(args, format);
-  return vfscanf(f, format, args);
+  out = vfscanf(f, format, args);
+  va_end(args);
+  return out;
 }
 
 extern int scanf(const char *format, ...) {
   va_list args;
+  int out;
 
   va_start(args, format);
-  return vfscanf(stdout, format, args);
+  out = vfscanf(stdout, format, args);
+  va_end(args);
+  return out;
 }
 
 extern int sscanf(char *buffer, const char *format, ...) {
   FILE fraw;
   va_list args;
+  int out;
 
   fraw.eof = 0;
   fraw.error = 0;
   fraw.ram_file = 1;
   fraw.file.buffer = buffer;
   va_start(args, format);
-  return vfscanf(&fraw, format, args);
+  out = vfscanf(&fraw, format, args);
+  va_end(args);
+  return out;
 }
 
 static int vfscanf(FILE *f, const char *format, va_list args) {

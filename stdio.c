@@ -377,3 +377,9 @@ extern FILE *freopen(const char *filename, const char *mode, FILE *f) {
 
   return f;
 }
+
+extern int fflush(FILE *f) {
+  /* buffering is for nerds */
+
+  return 0;
+}

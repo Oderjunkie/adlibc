@@ -35,4 +35,8 @@ extern long int ftell(FILE *);
 extern int fseek(FILE *, long int, int);
 extern int fgetpos(FILE *, fpos_t *);
 extern int fsetpos(FILE *, const fpos_t *);
+extern void rewind(FILE *);
+extern void clearerr(FILE *);
+extern int ungetc(int, FILE *);
+extern char *gets(char *);
 

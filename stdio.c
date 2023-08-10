@@ -224,6 +224,8 @@ extern int vsprintf(char *buffer, const char *format, va_list args) {
 
 extern int vfprintf(FILE *f, const char *format, va_list args) {
   /* TODO: implement this function. */
+  (void) args;
+
   fputs(format, f);
   return strlen(format);
 }
@@ -258,6 +260,10 @@ extern int sscanf(char *buffer, const char *format, ...) {
 
 static int vfscanf(FILE *f, const char *format, va_list args) {
   /* TODO: implement this function. */
+  (void) f;
+  (void) format;
+  (void) args;
+
   return 0;
 }
 
@@ -305,4 +311,22 @@ extern int fsetpos(FILE *f, const fpos_t *pos) {
     return EOF;
   else
     return 0;
+}
+
+extern void rewind(FILE *f) {
+  fseek(f, 0, SEEK_SET);
+  clearerr(f);
+}
+
+extern void clearerr(FILE *f) {
+  f->error = 0;
+}
+
+extern int ungetc(int ch, FILE *f) {
+  if (ch == EOF || f->ram_file || f->file.unix_file.last_char != EOF) {
+    return EOF;
+  } else {
+    f->file.unix_file.last_char = ch;
+    return ch;
+  }
 }

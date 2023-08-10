@@ -39,4 +39,6 @@ extern void rewind(FILE *);
 extern void clearerr(FILE *);
 extern int ungetc(int, FILE *);
 extern char *gets(char *);
+extern FILE *freopen(const char *, const char *, FILE *);
+extern int fflush(FILE *);
 

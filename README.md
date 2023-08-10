@@ -70,15 +70,15 @@ void (*signal(int, void (*)(int)))(int);
 int raise(int);
 
 #include <stdarg.h>
-void va_start(va_list, any);
-T va_arg(va_list, type T);
+/* void va_start(va_list, any); */
+/* T va_arg(va_list, type T); */
 
 #include <stdio.h>
 /* typedef struct { ... } FILE; */
 /* FILE *stdin, *stdout, *stderr; */
 /* FILE *fopen(const char *, const char *); */
-FILE *freopen(const char *, const char *, FILE *);
-int fflush(FILE *);
+/* FILE *freopen(const char *, const char *, FILE *); */
+/* int fflush(FILE *); */
 /* int fclose(FILE *); */
 int remove(const char *);
 int rename(const char *, const char *);

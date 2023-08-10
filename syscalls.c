@@ -31,3 +31,7 @@ extern void __munmap(void *addr, size_t len) {
 extern void __exit(int code) {
   (void) __syscall(_EXIT_SYSCALL_NUM, code);
 }
+
+extern int __unlink(const char *filename) {
+  return (int) (ssize_t) __syscall(_UNLINK_SYSCALL_NUM, filename);
+}

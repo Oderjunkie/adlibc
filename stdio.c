@@ -383,3 +383,8 @@ extern int fflush(FILE *f) {
 
   return 0;
 }
+
+extern int remove(const char *filename) {
+  return __unlink(filename);
+}
+

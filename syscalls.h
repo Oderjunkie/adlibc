@@ -10,7 +10,8 @@ enum {
   _LSEEK_SYSCALL_NUM = 8,
   _MMAP_SYSCALL_NUM = 9,
   _MUNMAP_SYSCALL_NUM = 11,
-  _EXIT_SYSCALL_NUM = 60
+  _EXIT_SYSCALL_NUM = 60,
+  _UNLINK_SYSCALL_NUM = 87
 };
 
 enum {
@@ -30,4 +31,5 @@ extern off_t __lseek(int, off_t, int);
 extern void *__mmap(void *, size_t, int, int, int, off_t);
 extern void __munmap(void *, size_t);
 extern void __exit(int);
+extern int __unlink(const char *);
 

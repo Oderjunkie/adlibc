@@ -330,3 +330,17 @@ extern int ungetc(int ch, FILE *f) {
     return ch;
   }
 }
+
+extern char *gets(char *buffer) {
+  int c;
+  char *bufferp;
+
+  bufferp = buffer;
+  while ((c = getchar()) != EOF)
+    *bufferp++ = (char) c;
+
+  if (ferror(stdin))
+    return (char *) 0;
+  else
+    return buffer;
+}

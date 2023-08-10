@@ -363,3 +363,17 @@ extern char *gets(char *buffer) {
   else
     return buffer;
 }
+
+extern FILE *freopen(const char *filename, const char *mode, FILE *f) {
+  FILE *g;
+
+  fclose(f);
+  if (!filename)
+    return (FILE *) 0;
+  if (!(g = fopen(filename, mode)))
+    return (FILE *) 0;
+  memcpy(f, g, sizeof(*g));
+  free(g);
+
+  return f;
+}

@@ -56,7 +56,7 @@ extern size_t fwrite(const void *buffer, size_t size, size_t count, FILE *f) {
   return count;
 }
 
-static int fgperror(unsigned char ucch, size_t bytes, FILE *f) {
+static int fgperror(unsigned char ucch, ssize_t bytes, FILE *f) {
   if (bytes > 0) {
     f->eof = 0;
     f->error = 0;
@@ -79,8 +79,14 @@ extern int fgetc(FILE *f) {
     f->eof = 0;
     f->error = 0;
     return *f->file.buffer++;
+  } else if (f->file.unix_file.last_char != EOF) {
+    int c;
+
+    c = f->file.unix_file.last_char;
+    f->file.unix_file.last_char = EOF;
+    return c;
   } else {
-    size_t bytes;
+    ssize_t bytes;
 
     bytes = __read(f->file.unix_file.fd, &ucch, 1);
     return fgperror(ucch, bytes, f);
@@ -95,8 +101,9 @@ extern int fputc(int ch, FILE *f) {
     f->eof = 0;
     f->error = 0;
     *f->file.buffer++ = (char) ucch;
+    return (int) ucch;
   } else {
-    size_t bytes;
+    ssize_t bytes;
 
     bytes = __write(f->file.unix_file.fd, &ucch, 1);
     return fgperror(ucch, bytes, f);

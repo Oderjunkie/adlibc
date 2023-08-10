@@ -132,8 +132,8 @@ void *calloc(size_t, size_t);
 /* void *realloc(void *, size_t); */
 /* void free(void *); */
 void abort(void);
-void exit(int);
-int atexit(void (*)(void));
+/* void exit(int); */
+/* int atexit(void (*)(void)); */
 int system(const char *);
 char getenv(const char *);
 void bsearch(const void *, const void *, size_t, size_t, int (*)(const void *, const void *);

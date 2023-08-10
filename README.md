@@ -105,15 +105,15 @@ char *gets(char *);
 /* int putc(int c, FILE* stream); */
 /* int putchar(int); */
 /* int puts(const char *); */
-int unget(int, FILE *);
+/* int ungetc(int, FILE *); */
 /* size_t fread(void *, size_t, size_t, FILE *); */
 /* size_t fwrite(const void *, size_t, size_t, FILE *); */
 /* int fseek(FILE *, long, int); */
 /* long ftell(FILE *); */
-void rewind(FILE *);
+/* void rewind(FILE *); */
 /* int fgetpos(FILE *, fpos_t *); */
 /* int fsetpos(FILE *, const fpos_t *); */
-void clearerr(FILE *);
+/* void clearerr(FILE *); */
 /* int feof(FILE *); */
 /* int ferror(FILE *); */
 void perror(const char *);

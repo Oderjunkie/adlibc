@@ -101,7 +101,7 @@ int sscanf(char *, const char *, ...);
 /* char *fputs(const char *, FILE *); */
 /* int getc(FILE *); */
 /* int getchar(); */
-char *gets(char *);
+/* char *gets(char *); */
 /* int putc(int c, FILE* stream); */
 /* int putchar(int); */
 /* int puts(const char *); */

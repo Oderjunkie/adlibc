@@ -70,3 +70,23 @@ extern int atoi(const char *str) {
 
   return magnitude * sign;
 }
+
+#define EXIT_HANDLER_MAX 32
+static void (*exit_handlerv[EXIT_HANDLER_MAX])(void) = { 0 };
+static int exit_handlerc = 0;
+extern void exit(int code) {
+  int i;
+
+  for (i = exit_handlerc - 1; i >= 0; --i)
+    (*exit_handlerv[i])();
+  (void) __exit(code);
+}
+
+extern int atexit(void (*handler)(void)) {
+  if (exit_handlerc < EXIT_HANDLER_MAX) {
+    exit_handlerv[exit_handlerc++] = handler;
+    return 0;
+  } else {
+    return -1;
+  }
+}

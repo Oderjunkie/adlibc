@@ -184,7 +184,7 @@ extern int getc(FILE *f) {
 }
 
 extern int getchar(void) {
-  return fgetc(stdout);
+  return fgetc(stdin);
 }
 
 extern int printf(const char *format, ...) {

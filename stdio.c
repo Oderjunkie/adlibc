@@ -1,7 +1,6 @@
 #include "include/stdio.h"
 #include "include/stdlib.h"
 #include "include/string.h"
-#include "include/stdarg.h"
 #include "syscalls.h"
 
 struct FILE {
@@ -232,14 +231,6 @@ extern int vsprintf(char *buffer, const char *format, va_list args) {
   return vfprintf(&fraw, format, args);
 }
 
-extern int vfprintf(FILE *f, const char *format, va_list args) {
-  /* TODO: implement this function. */
-  (void) args;
-
-  fputs(format, f);
-  return strlen(format);
-}
-
 static int vfscanf(FILE *, const char *, va_list);
 
 extern int fscanf(FILE *f, const char *format, ...) {
@@ -387,4 +378,3 @@ extern int fflush(FILE *f) {
 extern int remove(const char *filename) {
   return __unlink(filename);
 }
-

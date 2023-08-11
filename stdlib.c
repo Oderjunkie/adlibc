@@ -80,6 +80,10 @@ extern void exit(int code) {
   for (i = exit_handlerc - 1; i >= 0; --i)
     (*exit_handlerv[i])();
   (void) __exit(code);
+
+#ifdef __GNUC__
+  __builtin_unreachable();
+#endif
 }
 
 extern int atexit(void (*handler)(void)) {

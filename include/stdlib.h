@@ -6,3 +6,6 @@ extern void free(void *);
 extern int atoi(const char *);
 extern void exit(int);
 extern int atexit(void (*)(void));
+extern int abs(int);
+extern long int labs(long int);
+

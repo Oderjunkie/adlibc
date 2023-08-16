@@ -17,7 +17,7 @@ extern int iscntrl(int ch) {
 }
 
 extern int isdigit(int ch) {
-  return !!strchr("0123456789", (char) ch);
+  return strchr("0123456789", (char) ch) != 0;
 }
 
 extern int isgraph(int ch) {
@@ -25,7 +25,7 @@ extern int isgraph(int ch) {
 }
 
 extern int islower(int ch) {
-  return !!strchr(lowercase, (char) ch);
+  return strchr(lowercase, (char) ch) != 0;
 }
 
 extern int isprint(int ch) {
@@ -33,19 +33,19 @@ extern int isprint(int ch) {
 }
 
 extern int ispunct(int ch) {
-  return !!strchr("!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~", ch);
+  return strchr("!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~", ch) != 0;
 }
 
 extern int isspace(int ch) {
-  return !!strchr("\t\n\v\f\r ", (char) ch);
+  return strchr("\t\n\v\f\r ", (char) ch) != 0;
 }
 
 extern int isupper(int ch) {
-  return !!strchr(uppercase, (char) ch);
+  return strchr(uppercase, (char) ch) != 0;
 }
 
 extern int isxdigit(int ch) {
-  return isdigit(ch) || !!strchr("ABCDEFabcdef", (char) ch);
+  return isdigit(ch) || strchr("ABCDEFabcdef", (char) ch) != 0;
 }
 
 extern int tolower(int ch) {

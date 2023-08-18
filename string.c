@@ -57,26 +57,19 @@ extern void *memset(void *ptr, int ch, size_t len) {
 
 extern char *strtok(char *str, const char *delims) {
   static char *curstr = (char *) 0;
-  static char ogchr = '\0';
   char *out;
 
   if (str)
     curstr = str;
-  else
-    *curstr = ogchr;
 
   out = curstr + strspn(curstr, delims);
   curstr = out + strcspn(out, delims);
 
-  ogchr = *curstr;
   *curstr = '\0';
-  if (*out) {
+  if (*out)
     return out;
-  } else {
-    *curstr = ogchr;
-    ogchr = '\0';
+  else
     return (char *) 0;
-  }
 }
 
 extern void *memcpy(void *dst, const void *src, size_t len) {
